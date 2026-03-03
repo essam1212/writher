@@ -137,7 +137,7 @@ ollama pull llama3.1
 Update `config.py` with your model name:
 
 ```python
-OLLAMA_MODEL = "llama3.1"
+OLLAMA_MODEL = "llama3.1:8b"
 ```
 
 ### 5. Run
